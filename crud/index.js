@@ -21,8 +21,8 @@ db.on('error', function(err) {
 });
 
 // Other settings
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public'));
+app.set('view engine', 'ejs'); //set ejs into express's view engine
+app.use(express.static(__dirname + '/public')); // getting the name through query. All the queries are saved in req.query
 app.use(bodyParser.json()); //this is bodyParser to put data into json file
 app.use(bodyParser.urlencoded({ extended: true })); //bodyParser url encoding
 
@@ -38,7 +38,7 @@ var Contact = mongoose.model('contact', contactSchema); //created model for cont
 //Routes
 //Home//
 app.get('/', function(req, res) {
-  res.redirect('/contacts'); //redirects to contracts
+  res.redirect('/contacts'); //redirects to contacts
 });
 
 //contacts
