@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser'); //body parser to show json string
 var app = express();
 
 // DB setting
@@ -10,7 +10,7 @@ mongoose.set('useCreateIndex', true); // 1
 mongoose.connect(
   'mongodb+srv://jgam:19921019@cluster0-itx5s.mongodb.net/test?retryWrites=true&w=majority'
 ); // 2
-var db = mongoose.connection; // 3
+var db = mongoose.connection; // check the conection
 // 4
 db.once('open', function() {
   console.log('DB connected');
@@ -23,21 +23,25 @@ db.on('error', function(err) {
 // Other settings
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json()); //this is bodyParser
+app.use(bodyParser.json()); //this is bodyParser to put data into json file
 app.use(bodyParser.urlencoded({ extended: true })); //bodyParser url encoding
 
 // DB schema
 var contactSchema = mongoose.Schema({
+  // schema object creation. will be saved in the following form
   name: { type: String, required: true, unique: true },
   email: { type: String },
   phone: { type: String }
 });
 var Contact = mongoose.model('contact', contactSchema); //created model for contactSchema
 
+//Routes
+//Home//
 app.get('/', function(req, res) {
-  res.redirect('/contacts');
+  res.redirect('/contacts'); //redirects to contracts
 });
 
+//contacts
 app.get('/contacts', function(req, res) {
   Contact.find({}, function(err, contacts) {
     if (err) return res.json(err);
@@ -45,10 +49,12 @@ app.get('/contacts', function(req, res) {
   });
 });
 
+//contacts new
 app.get('/contacts/new', function(req, res) {
   res.render('contacts/new'); //contact get response
 });
 
+//contacts create
 app.post('/contacts', function(req, res) {
   Contact.create(req.body, function(err, contact) {
     if (err) return res.json(err);
