@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser'); //body parser to show json string
+var methodOverride = require('method-override');
 var app = express();
 
 // DB setting
@@ -22,9 +23,10 @@ db.on('error', function(err) {
 
 // Other settings
 app.set('view engine', 'ejs'); //set ejs into express's view engine
-app.use(express.static(__dirname + '/public')); // getting the name through query. All the queries are saved in req.query
+app.use(express.static(__dirname + '/public')); // set public as the route folder
 app.use(bodyParser.json()); //this is bodyParser to put data into json file
 app.use(bodyParser.urlencoded({ extended: true })); //bodyParser url encoding
+app.use(methodOverride('_method'));
 
 // DB schema
 var contactSchema = mongoose.Schema({
@@ -57,6 +59,38 @@ app.get('/contacts/new', function(req, res) {
 //contacts create
 app.post('/contacts', function(req, res) {
   Contact.create(req.body, function(err, contact) {
+    if (err) return res.json(err);
+    res.redirect('/contacts');
+  });
+});
+
+//contacts - show 3
+app.get('/contacts/:id', function(req, res) {
+  Contact.findOne({ _id: req.params.id }, function(err, contact) {
+    if (err) return res.json(err);
+    res.render('contacts/show', { contact: contact });
+  });
+});
+// Contacts - edit // 4
+app.get('/contacts/:id/edit', function(req, res) {
+  Contact.findOne({ _id: req.params.id }, function(err, contact) {
+    if (err) return res.json(err);
+    res.render('contacts/edit', { contact: contact });
+  });
+});
+// Contacts - update // 5
+app.put('/contacts/:id', function(req, res) {
+  Contact.findOneAndUpdate({ _id: req.params.id }, req.body, function(
+    err,
+    contact
+  ) {
+    if (err) return res.json(err);
+    res.redirect('/contacts/' + req.params.id);
+  });
+});
+// Contacts - destroy // 6
+app.delete('/contacts/:id', function(req, res) {
+  Contact.deleteOne({ _id: req.params.id }, function(err, contact) {
     if (err) return res.json(err);
     res.redirect('/contacts');
   });
