@@ -26,7 +26,7 @@ app.set('view engine', 'ejs'); //set ejs into express's view engine
 app.use(express.static(__dirname + '/public')); // set public as the route folder
 app.use(bodyParser.json()); //this is bodyParser to put data into json file
 app.use(bodyParser.urlencoded({ extended: true })); //bodyParser url encoding
-app.use(methodOverride('_method'));
+app.use(methodOverride('_method')); //change method's query to HTTP method
 
 // DB schema
 var contactSchema = mongoose.Schema({
@@ -38,21 +38,27 @@ var contactSchema = mongoose.Schema({
 var Contact = mongoose.model('contact', contactSchema); //created model for contactSchema
 
 //Routes
-//Home//
+//Home// automatically redirects to contacts
 app.get('/', function(req, res) {
+  //console.log(res);
+  console.log('1');
   res.redirect('/contacts'); //redirects to contacts
 });
 
 //contacts
 app.get('/contacts', function(req, res) {
-  Contact.find({}, function(err, contacts) {
+  Contact.find({}, function(err, contactsprops) {
     if (err) return res.json(err);
-    res.render('contacts/index', { contacts: contacts });
+    console.log('2');
+
+    res.render('contacts/index', { contacts: contactsprops });
   });
 });
 
 //contacts new
 app.get('/contacts/new', function(req, res) {
+  console.log('3');
+
   res.render('contacts/new'); //contact get response
 });
 
@@ -60,6 +66,8 @@ app.get('/contacts/new', function(req, res) {
 app.post('/contacts', function(req, res) {
   Contact.create(req.body, function(err, contact) {
     if (err) return res.json(err);
+    console.log('4');
+
     res.redirect('/contacts');
   });
 });
@@ -68,6 +76,8 @@ app.post('/contacts', function(req, res) {
 app.get('/contacts/:id', function(req, res) {
   Contact.findOne({ _id: req.params.id }, function(err, contact) {
     if (err) return res.json(err);
+    console.log('5');
+
     res.render('contacts/show', { contact: contact });
   });
 });
@@ -75,6 +85,8 @@ app.get('/contacts/:id', function(req, res) {
 app.get('/contacts/:id/edit', function(req, res) {
   Contact.findOne({ _id: req.params.id }, function(err, contact) {
     if (err) return res.json(err);
+    console.log('6');
+
     res.render('contacts/edit', { contact: contact });
   });
 });
@@ -85,6 +97,8 @@ app.put('/contacts/:id', function(req, res) {
     contact
   ) {
     if (err) return res.json(err);
+    console.log('7');
+
     res.redirect('/contacts/' + req.params.id);
   });
 });
@@ -92,6 +106,8 @@ app.put('/contacts/:id', function(req, res) {
 app.delete('/contacts/:id', function(req, res) {
   Contact.deleteOne({ _id: req.params.id }, function(err, contact) {
     if (err) return res.json(err);
+    console.log('8');
+
     res.redirect('/contacts');
   });
 });
