@@ -1,119 +1,37 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser'); //body parser to show json string
-var methodOverride = require('method-override');
+//index.js
+
+var express = require("express");
+var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 var app = express();
 
 // DB setting
-mongoose.set('useNewUrlParser', true); // 1
-mongoose.set('useFindAndModify', false); // 1
-mongoose.set('useCreateIndex', true); // 1
-mongoose.connect(
-  'mongodb+srv://jgam:19921019@cluster0-itx5s.mongodb.net/test?retryWrites=true&w=majority'
-); // 2
-var db = mongoose.connection; // check the conection
-// 4
-db.once('open', function() {
-  console.log('DB connected');
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.connect('mongodb+srv://jgam:19921019@cluster0-itx5s.mongodb.net/test?retryWrites=true&w=majority');
+var db = mongoose.connection;
+db.once("open", function(){
+  console.log("DB connected");
 });
-// 5
-db.on('error', function(err) {
-  console.log('DB ERROR : ', err);
+db.on("error", function(err){
+  console.log("DB ERROR : ", err);
 });
 
 // Other settings
-app.set('view engine', 'ejs'); //set ejs into express's view engine
-app.use(express.static(__dirname + '/public')); // set public as the route folder
-app.use(bodyParser.json()); //this is bodyParser to put data into json file
-app.use(bodyParser.urlencoded({ extended: true })); //bodyParser url encoding
-app.use(methodOverride('_method')); //change method's query to HTTP method
+app.set("view engine", "ejs");
+app.use(express.static(__dirname+"/public"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
 
-// DB schema
-var contactSchema = mongoose.Schema({
-  // schema object creation. will be saved in the following form
-  name: { type: String, required: true, unique: true },
-  email: { type: String },
-  phone: { type: String }
-});
-var Contact = mongoose.model('contact', contactSchema); //created model for contactSchema
-
-//Routes
-//Home// automatically redirects to contacts
-app.get('/', function(req, res) {
-  //console.log(res);
-  console.log('1');
-  res.redirect('/contacts'); //redirects to contacts
-});
-
-//contacts
-app.get('/contacts', function(req, res) {
-  Contact.find({}, function(err, contactsprops) {
-    if (err) return res.json(err);
-    console.log('2');
-
-    res.render('contacts/index', { contacts: contactsprops });
-  });
-});
-
-//contacts new
-app.get('/contacts/new', function(req, res) {
-  console.log('3');
-
-  res.render('contacts/new'); //contact get response
-});
-
-//contacts create
-app.post('/contacts', function(req, res) {
-  Contact.create(req.body, function(err, contact) {
-    if (err) return res.json(err);
-    console.log('4');
-
-    res.redirect('/contacts');
-  });
-});
-
-//contacts - show 3
-app.get('/contacts/:id', function(req, res) {
-  Contact.findOne({ _id: req.params.id }, function(err, contact) {
-    if (err) return res.json(err);
-    console.log('5');
-
-    res.render('contacts/show', { contact: contact });
-  });
-});
-// Contacts - edit // 4
-app.get('/contacts/:id/edit', function(req, res) {
-  Contact.findOne({ _id: req.params.id }, function(err, contact) {
-    if (err) return res.json(err);
-    console.log('6');
-
-    res.render('contacts/edit', { contact: contact });
-  });
-});
-// Contacts - update // 5
-app.put('/contacts/:id', function(req, res) {
-  Contact.findOneAndUpdate({ _id: req.params.id }, req.body, function(
-    err,
-    contact
-  ) {
-    if (err) return res.json(err);
-    console.log('7');
-
-    res.redirect('/contacts/' + req.params.id);
-  });
-});
-// Contacts - destroy // 6
-app.delete('/contacts/:id', function(req, res) {
-  Contact.deleteOne({ _id: req.params.id }, function(err, contact) {
-    if (err) return res.json(err);
-    console.log('8');
-
-    res.redirect('/contacts');
-  });
-});
+// Routes
+app.use("/", require("./routes/home")); //1
+app.use("/contacts", require("./routes/contacts")); //2
 
 // Port setting
 var port = 3000;
-app.listen(3000, function() {
-  console.log('server on! http://localhost:' + port);
+app.listen(port, function(){
+  console.log("server on! http://localhost:"+port);
 });
