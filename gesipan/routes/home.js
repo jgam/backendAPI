@@ -10,5 +10,7 @@ router.get('/', function(req, res) {
 router.get('/about', function(req, res) {
   res.render('home/about');
 });
-
+router.get('/test', function(req, res) {
+  res.render('partials/nav');
+});
 module.exports = router;
