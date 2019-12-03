@@ -5,6 +5,7 @@ var methodOverride = require('method-override');
 var app = express();
 
 //DB setting
+
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);

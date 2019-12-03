@@ -1,4 +1,5 @@
 //model/Post.js
+//this is model creation with mongo db
 
 var mongoose = require('mongoose');
 

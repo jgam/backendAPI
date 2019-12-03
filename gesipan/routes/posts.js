@@ -23,7 +23,7 @@ router.get('/new', function(req, res) {
 router.post('/', function(req, res) {
   Post.create(req.body, function(err, post) {
     if (err) return res.json(err);
-    res.redirect('/posts');
+    res.redirect('/posts'); //automatically renders index in posts directory
   });
 });
 
