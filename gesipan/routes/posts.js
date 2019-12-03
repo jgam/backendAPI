@@ -6,8 +6,8 @@ var Post = require('../models/Post');
 
 //Index
 router.get('/', function(req, res) {
-  POst.find({})
-    .sort('-createdAt')
+  Post.find({}) //use an empty query object, which selects all documents in a collection
+    .sort('-createdAt') //sort by createdAt
     .exec(function(err, posts) {
       if (err) return res.json(err);
       res.render('posts/index', { posts: posts });
