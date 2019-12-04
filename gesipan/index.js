@@ -28,7 +28,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 //routes
+console.log('here');
 app.use('/', require('./routes/home'));
+console.log('here2');
 app.use('/posts', require('./routes/posts')); //directs to routs posts
 
 //port setting

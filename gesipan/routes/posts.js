@@ -6,6 +6,7 @@ var Post = require('../models/Post');
 
 //Index
 router.get('/', function(req, res) {
+  console.log('1');
   Post.find({}) //use an empty query object, which selects all documents in a collection
     .sort('-createdAt') //sort by createdAt
     .exec(function(err, posts) {
@@ -16,11 +17,15 @@ router.get('/', function(req, res) {
 
 //New
 router.get('/new', function(req, res) {
+  console.log('2');
+
   res.render('posts/new');
 });
 
 //create
 router.post('/', function(req, res) {
+  console.log('3');
+
   Post.create(req.body, function(err, post) {
     if (err) return res.json(err);
     res.redirect('/posts'); //automatically renders index in posts directory
@@ -29,6 +34,8 @@ router.post('/', function(req, res) {
 
 // show
 router.get('/:id', function(req, res) {
+  console.log('4');
+
   Post.findOne({ _id: req.params.id }, function(err, post) {
     if (err) return res.json(err);
     res.render('posts/show', { post: post });
@@ -45,6 +52,7 @@ router.get('/:id/edit', function(req, res) {
 
 // update
 router.put('/:id', function(req, res) {
+  console.log('edit did');
   req.body.updatedAt = Date.now(); // 2
   Post.findOneAndUpdate({ _id: req.params.id }, req.body, function(err, post) {
     if (err) return res.json(err);
