@@ -16,11 +16,21 @@ var postSchema = mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
-
+/*
+var userModel = mongoose.model('users', postSchema);
+var person = new userModel({ title: '11', body: '333' });
+person.save(function(err, res) {
+  if (err) {
+    return;
+  }
+  console.log('added to db');
+});
+*/
 //virtuals //3
 postSchema.virtual('createdDate').get(function() {
+  //inside of postSchema, virtually access entity
   //using virtual method,
-  return getDate(this.createdAt);
+  return getDate(this.createdAt); //update createdDate : getDate(this.createdAt)
 });
 
 postSchema.virtual('createdTime').get(function() {
