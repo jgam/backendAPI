@@ -10,6 +10,7 @@ router.get('/', function(req, res) {
   Post.find({}) //use an empty query object, which selects all documents in a collection
     .sort('-createdAt') //sort by createdAt
     .exec(function(err, posts) {
+      //what to do with data? we put in res.render
       if (err) return res.json(err);
       res.render('posts/index', { posts: posts });
     });
@@ -24,10 +25,12 @@ router.get('/new', function(req, res) {
 
 //create
 router.post('/', function(req, res) {
+  //when there is router post
   console.log('3');
 
   Post.create(req.body, function(err, post) {
-    if (err) return res.json(err);
+    //creates data in db(data, callback Function)
+    if (err) return res.json(err); //here post is the created data if not, then error
     res.redirect('/posts'); //automatically renders index in posts directory
   });
 });
