@@ -22,8 +22,9 @@ router.get('/new', function(req, res) {
 // create
 router.post('/', function(req, res) {
   User.create(req.body, function(err, user) {
-    if (err) return res.json(err);
-    res.redirect('/users');
+    //create data with req.body
+    if (err) return res.json(err); //callback creates takes user as created data
+    res.redirect('/users'); //and redirects
   });
 });
 
