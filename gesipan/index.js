@@ -2,6 +2,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var flash = require('connect-falsh');
+var session = require('express-session');
 var app = express();
 
 //DB setting
@@ -20,13 +22,15 @@ db.on('error', function(err) {
   console.log('DB ERROR : ', err);
 });
 
-//Other settings
+// Other settings
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-
+app.use(flash()); // 2 flash is an array that stores number and string in array as index and element
+app.use(session({ secret: 'MySecret', resave: true, saveUninitialized: true })); // 3
+//session is to distinguish users and secret is the password for specific session.
 //routes
 app.use('/', require('./routes/home'));
 app.use('/posts', require('./routes/posts')); //directs to routs posts
