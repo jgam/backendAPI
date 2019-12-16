@@ -5,10 +5,12 @@ var app        = express();
 var path       = require('path');
 var mongoose   = require('mongoose');
 var bodyParser = require('body-parser');
-
+const dotenv = require('dotenv');
+dotenv.config();
+console.log(process.env.MONGO_DB_LOGIN_API);
 // Database
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGO_DB_LOGIN_API, {useMongoClient: true});
+mongoose.connect(process.env.MONGO_DB_LOGIN_API);
 var db = mongoose.connection;
 db.once('open', function () {
    console.log('DB connected!');
