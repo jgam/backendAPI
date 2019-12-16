@@ -8,7 +8,6 @@ dotenv.config();
 
 //Database
 mongoose.Promise = global.Promise;
-console.log(process.env.MONGO_DB);
 mongoose.connect(process.env.MONGO_DB, {userMongoClient:true});
 var db = mongoose.connection;
 
