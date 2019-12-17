@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var flash = require('connect-falsh');
 var session = require('express-session');
+var passport = require("./config/passport");//1
 var app = express();
 
 //DB setting
@@ -35,6 +36,19 @@ app.use(session({ secret: 'MySecret', resave: true, saveUninitialized: true }));
 app.use('/', require('./routes/home'));
 app.use('/posts', require('./routes/posts')); //directs to routs posts
 app.use('/users', require('./routes/users'));
+
+
+// Passport // 2
+app.use(passport.initialize());
+app.use(passport.session()); 
+
+// Custom Middlewares // 3
+app.use(function(req,res,next){
+ res.locals.isAuthenticated = req.isAuthenticated();
+ res.locals.currentUser = req.user;
+ next();
+})
+
 
 //port setting
 var port = 3000;
