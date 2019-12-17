@@ -15,7 +15,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 // local strategy // 3
-passport.use("local-login",
+passport.use("local-login",//using local storage
  new LocalStrategy({
    usernameField : "username", // 3-1
    passwordField : "password", // 3-1
