@@ -42,11 +42,11 @@ router.get("/login", function (req,res) {
    if(isValid){
     next();
    } else {
-    req.flash("errors",errors);
+    req.flash("errors",errors);//if not authenticated, creates flash and redirects to login again
     res.redirect("/login");
    }
   },
-  passport.authenticate("local-login", {
+  passport.authenticate("local-login", {//proceed with the passport local strategy to do authentication
    successRedirect : "/",
    failureRedirect : "/login"
   }
