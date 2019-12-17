@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 //Database
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;//async execution method
 mongoose.connect(process.env.MONGO_DB, {userMongoClient:true});
 var db = mongoose.connection;
 
@@ -24,9 +24,9 @@ db.on('error', function(err){
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(function (req, res,next){
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'Get, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'content-type');
+    res.header('Access-Control-Allow-Origin', '*');//giving headers which is access control
+    res.header('Access-Control-Allow-Methods', 'Get, POST, PUT, DELETE');//methods
+    res.header('Access-Control-Allow-Headers', 'content-type');//content-type
     next();
 })
 
