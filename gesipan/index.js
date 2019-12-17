@@ -23,8 +23,23 @@ db.on('error', function(err) {
   console.log('DB ERROR : ', err);
 });
 
+
+
 // Other settings
 app.set('view engine', 'ejs');
+
+// Passport // 2
+app.use(passport.initialize());
+app.use(passport.session()); 
+
+// Custom Middlewares // 3
+app.use(function(req,res,next){
+ res.locals.isAuthenticated = req.isAuthenticated();
+ res.locals.currentUser = req.user;
+ next();
+})
+
+
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,16 +53,7 @@ app.use('/posts', require('./routes/posts')); //directs to routs posts
 app.use('/users', require('./routes/users'));
 
 
-// Passport // 2
-app.use(passport.initialize());
-app.use(passport.session()); 
 
-// Custom Middlewares // 3
-app.use(function(req,res,next){
- res.locals.isAuthenticated = req.isAuthenticated();
- res.locals.currentUser = req.user;
- next();
-})
 
 
 //port setting
