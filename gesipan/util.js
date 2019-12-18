@@ -1,5 +1,5 @@
 // util.js
-﻿
+
 var util = {};
 
 util.parseError = function(errors){
