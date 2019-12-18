@@ -10,6 +10,7 @@ var postSchema = mongoose.Schema(
     //postSchema is composed of title, body, createdAt, updatedAt
     title: { type: String, required: [true,"Title is required!"]},//2
     body: { type: String, required:[true, "Body is required!"] },//2
+    author:{type:mongoose.Schema.Types.ObjectId, ref:"user", required:true},//1
     createdAt: { type: Date, default: Date.now }, //can set default
     updatedAt: { type: Date }
   },
