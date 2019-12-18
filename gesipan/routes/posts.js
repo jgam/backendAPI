@@ -15,7 +15,7 @@ router.get("/", function(req, res){
 });
 
 // New
-router.get("/new", util.isLoggedin, function(req, res){
+router.get("/new", util.isLoggedin, function(req, res){//util.isLoggedin needs to be true in order to run the callback function
   var post = req.flash("post")[0] || {};
   var errors = req.flash("errors")[0] || {};
   res.render("posts/new", { post:post, errors:errors });
