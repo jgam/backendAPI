@@ -74,6 +74,7 @@ form .form-group{
 }
 /*comment CSS*/
 .commentBox{
+  margin-left: 40%;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
