@@ -5,6 +5,7 @@ var util     = require("../util");
 
 // Index
 router.get("/", function(req, res){
+  console.log(Post.find().populate("comment"));
   Post.find({})
   .populate("author")
   .sort("-createdAt")
@@ -33,6 +34,19 @@ router.post("/", util.isLoggedin, function(req, res){
     res.redirect("/posts");
   });
 });
+
+//create comment
+router.post("/:id", function(req, res){
+  console.log(req.body);
+  Post.create(req.body, function(err, post){
+    if(err){
+      req.flash("comment", req.body);
+      req.flash("errors", util.parseError(err));
+      return res.redirect("/posts");
+    }
+    res.redirect("/posts");
+  })
+})
 
 // show
 router.get("/:id", function(req, res){
