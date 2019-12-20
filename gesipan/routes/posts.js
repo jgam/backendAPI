@@ -45,14 +45,26 @@ router.post("/:id", function(req, res){
   console.log('***********');
   //the flow is find the post by its ID and update comment.
   //then in the /posts funciton, we should display comment if available
-  
-  Post.create(req.body, function(err, post){
+  /*
+  Post.findOneAndUpdate({_id:req.params.id}, req.body, {runValidators:true}, function(err, post){
     if(err){
+      req.flash("post", req.body);
+      req.flash("errors", util.parseError(err));
+      return res.redirect("/posts/"+req.params.id+"/edit");
+    }
+    res.redirect("/posts/"+req.params.id);
+  });
+  */
+  Post.findOneAndUpdate({_id:req.params.id},req.body, function(err, post){
+    if(err){
+      console.log('error occurred in findone and update');
       req.flash("comment", req.body);
       req.flash("errors", util.parseError(err));
       return res.redirect("/posts");
     }
-    res.redirect("/posts");
+    console.log('sucessfully added posts!');
+    console.log(req.body);
+    res.redirect("/posts/"+req.params.id);
   })
 })
 

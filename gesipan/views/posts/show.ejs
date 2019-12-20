@@ -38,9 +38,7 @@
       </div> <!-- post-container end -->
       <br>
       <br>
-      <% if(post.comment) { %>
-        <div> <%= post.comment %> : no comments </div>
-      <% } %>
+        <div> <%= post.comment ? post.comment : "no comment" %> </div><!--if comment is available, then print or print "no comment"-->
       <br>
       <br>
       <br>
