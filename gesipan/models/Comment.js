@@ -13,11 +13,16 @@ var commentSchema = mongoose.Schema(
             type:String,
             required: [true, "content is required!"],
         },
+        postID: {
+            type:String
+        },
         likes:{
-            type: Number
+            type: Number,
+            default: 0
         },
         dislikes:{
-            type: Number
+            type: Number,
+            default: 0
         }
     },
     {
