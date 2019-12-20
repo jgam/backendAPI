@@ -76,7 +76,8 @@ form .form-group{
 .commentBox{
   margin-left: 40%;
   border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 3px solid #ccc;
+  line-height: 60px;
 }
 .commentBoxTop {
   font-size: 14px;

@@ -1,6 +1,7 @@
 var express  = require("express");
 var router   = express.Router();
 var Post     = require("../models/Post");
+var Comment  = require("../models/Comment");
 var util     = require("../util");
 
 // Index
@@ -40,21 +41,18 @@ router.post("/", util.isLoggedin, function(req, res){
 //create comment .findoneAndUpdate!
 router.post("/:id", function(req, res){
   console.log('***********');
-  console.log(req.params.id);
-  console.log(req.body);
+  console.log(req.params.id);//5dasdfasdjfklsdjl
+  console.log(req.body);//{comment: 'testcomment'}
   console.log('***********');
-  //the flow is find the post by its ID and update comment.
-  //then in the /posts funciton, we should display comment if available
-  /*
-  Post.findOneAndUpdate({_id:req.params.id}, req.body, {runValidators:true}, function(err, post){
-    if(err){
-      req.flash("post", req.body);
-      req.flash("errors", util.parseError(err));
-      return res.redirect("/posts/"+req.params.id+"/edit");
-    }
-    res.redirect("/posts/"+req.params.id);
-  });
-  */
+
+  //req.body will be {comment : "test comment"}, I need to loop through
+  //append string to array.
+
+  //before findOneAndUpdate, should connect with comment model and append to it
+  Comment.create(req.body)
+
+
+
   Post.findOneAndUpdate({_id:req.params.id},req.body, function(err, post){
     if(err){
       console.log('error occurred in findone and update');
