@@ -5,7 +5,9 @@ var util     = require("../util");
 
 // Index
 router.get("/", function(req, res){
-  console.log(Post.find().populate("comment"));
+  Post.find({}).populate("author").exec((err, data) => {
+    console.log(data);
+  });
   Post.find({})
   .populate("author")
   .sort("-createdAt")
@@ -35,9 +37,15 @@ router.post("/", util.isLoggedin, function(req, res){
   });
 });
 
-//create comment
+//create comment .findoneAndUpdate!
 router.post("/:id", function(req, res){
+  console.log('***********');
+  console.log(req.params.id);
   console.log(req.body);
+  console.log('***********');
+  //the flow is find the post by its ID and update comment.
+  //then in the /posts funciton, we should display comment if available
+  
   Post.create(req.body, function(err, post){
     if(err){
       req.flash("comment", req.body);
