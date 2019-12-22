@@ -31,6 +31,10 @@ router.get('/new', util.isLoggedin, function(req, res) {
 // create
 router.post('/', util.isLoggedin, function(req, res) {
   req.body.author = req.user._id;
+  console.log('******');
+  console.log(req.body);
+  console.log('******');
+
   Post.create(req.body, function(err, post) {
     if (err) {
       req.flash('post', req.body);
@@ -58,32 +62,17 @@ router.post('/:id', function(req, res, next) {
   Comment.create(req.body, function(err, comment) {
     //only after creation, the unique ID is available.
     console.log('comment model created successfully');
+    console.log(req.params);
     if (err) {
       return res.json(err);
     }
+    //using then?
+    var commentID;
+    commentID = connectCID(req.params.id); //this is then
     //res render? res.json? need to decide
   });
 
-  connectCID();
-  //first lets delete all the data in mongoose db.
-  //so post should have "unique IDs" of comments. check
-
-  /*
-  Comment.find({})
-    .sort('-createdAt')
-    .exec(function(err, posts) {
-      console.log(
-        'all the comments and the first one should be the recet one!!!'
-      );
-      console.log(posts);
-    });
-  */
-  //first define, if comments can create unique ids
-
-  // -> this should be done with connectCID
-
-  //if can, then add those to posts
-  //if not, i dont know what to do
+  //connectCID(); //the problem is comment.create is faster
 });
 
 // show
@@ -153,7 +142,7 @@ function checkPermission(req, res, next) {
 }
 
 //this is a function for connecting CommentID to postID
-function connectCID() {
+function connectCID(postID) {
   //first check the unique id of comments
   Comment.find({}).exec(function(err, comments) {
     console.log('comments length is : ');
@@ -161,5 +150,22 @@ function connectCID() {
     for (let i = 0; i < comments.length; i++) {
       console.log(comments[i].id);
     }
+    //comments[comments.length - 1].id;
+    Post.findOne({ _id: postID }, function(err, post) {
+      if (err) return res.json(err);
+      console.log(post);
+      post.comment.push(comments[comments.length - 1].id); //here finally adding the comments ID to post
+      Post.findOneAndUpdate(
+        { _id: postID },
+        post,
+        { runValidators: true },
+        function(err, post) {
+          if (err) return res.json(err);
+          console.log('finally here lets see...');
+          console.log(post);
+        }
+      );
+    });
+    Post.findOneAndUpdate({ _id: postID });
   });
 }
