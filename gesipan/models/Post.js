@@ -17,7 +17,7 @@ var postSchema = mongoose.Schema(
     }, //1
     createdAt: { type: Date, default: Date.now }, //can set default
     updatedAt: { type: Date },
-    comment: [mongoose.Schema.Types.ObjectId]
+    comment: [{type: mongoose.Schema.Types.ObjectId, ref:"comment"}]
   },
   {
     toObject: { virtuals: true }

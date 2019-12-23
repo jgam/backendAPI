@@ -48,32 +48,17 @@ router.post('/', util.isLoggedin, function(req, res) {
 //create comment .findoneAndUpdate!
 router.post('/:id', function(req, res, next) {
   req.body.postID = req.params.id; //this needs to be unique with posts
-  console.log('***********');
-  console.log(req.params.id); //5dasdfasdjfklsdjl
-  console.log(req.params);
-  console.log(req.body); //{ nickname: 'asdfasdf', comment: 'adadfasfasfsadf' }
-
-  console.log('***********asd');
-  console.log(req.body._id); //id
-  //req.body will be {comment : "test comment"}, I need to loop through
-  //append string to array.
-  var currentID;
-  //before findOneAndUpdate, should connect with comment model and append to it
+  
   Comment.create(req.body, function(err, comment) {
     //only after creation, the unique ID is available.
-    console.log('comment model created successfully');
-    console.log(req.params);
     if (err) {
       return res.json(err);
     }
     //using then?
     var commentID;
-    commentID = connectCID(req.params.id,res); //this is then
-    //res render? res.json? need to decide
-    //res.redirect('/posts/'+req.params.id);
+    commentID = connectCID(req.params.id,res); //through this, able to connect comment to post
   });
 
-  //here the post needs to be the post info
 });
 
 // show
@@ -81,10 +66,12 @@ router.get('/:id', function(req, res) {
   console.log('im in the show!');
   Post.findOne({ _id: req.params.id })
     .populate('author')
-    //.populate("comment")
+    .populate("comment")//this popupate should do the comment
     .exec(function(err, post) {
       if (err) return res.json(err);
       console.log(post); //here where is the comment field?
+      console.log('***********');
+      
       res.render('posts/show', { post: post });
     });
 });
@@ -146,19 +133,11 @@ function checkPermission(req, res, next) {
 function connectCID(postID,res) {
   //first check the unique id of comments
   Comment.find({}).exec(function(err, comments) {
-    console.log('comments length is : ');
-    console.log(comments.length);
-    for (let i = 0; i < comments.length; i++) {
-      console.log(comments[i].id);
-    }
     //comments[comments.length - 1].id;
     Post.findOne({ _id: postID }, function(err, post) {
       if (err) return res.json(err);
-      console.log(post);
       //post.comment.push(comments[comments.length - 1].id); //here finally adding the comments ID to post
-
-      postUpdate(post, comments, postID,post);
-      console.log('here should be printed last')
+      postUpdate(res,post, comments, postID,post);
       res.redirect('/posts/'+postID);
       
     });
@@ -169,10 +148,8 @@ function commentPush(query,comments){
   return query.comment.push(comments[comments.length-1].id);
 }
 
-async function postUpdate(query, comments, postID,post){
-  console.log("before adding the comment");
+async function postUpdate(res,query, comments, postID,post){
   var result = await commentPush(query, comments);
-  console.log(post);//until here the comment section hass been added
   Post.findOneAndUpdate(//i feel that this function takes longtime?
     { _id: postID },
     post,
