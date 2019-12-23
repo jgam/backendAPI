@@ -154,18 +154,35 @@ function connectCID(postID) {
     Post.findOne({ _id: postID }, function(err, post) {
       if (err) return res.json(err);
       console.log(post);
-      post.comment.push(comments[comments.length - 1].id); //here finally adding the comments ID to post
-      Post.findOneAndUpdate(
-        { _id: postID },
-        post,
-        { runValidators: true },
-        function(err, post) {
-          if (err) return res.json(err);
-          console.log('finally here lets see...');
-          console.log(post);
-        }
-      );
+      //post.comment.push(comments[comments.length - 1].id); //here finally adding the comments ID to post
+
+      postUpdate(post, comments, postID,post);
+      /*
+      setTimeout(function(){
+        console.log('waiting for 5 seconds');
+      },5000);
+      */
+      
     });
-    Post.findOneAndUpdate({ _id: postID });
   });
+}
+
+function commentPush(query,comments){
+  query.comment.push(comments[comments.length-1].id);
+  return 1;
+}
+
+async function postUpdate(query, comments, postID,post){
+  var result = await commentPush(query, comments);
+
+  Post.findOneAndUpdate(
+    { _id: postID },
+    post,
+    { runValidators: true },
+    function(err, post) {
+      if (err) return res.json(err);
+      console.log('finally here lets see...');
+      console.log(post);
+    }
+  );
 }
