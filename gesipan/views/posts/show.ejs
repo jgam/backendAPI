@@ -39,7 +39,13 @@
       <br>
       <br>
         <div> <%= post.comment ? post.comment : "no comment" %> </div><!--if comment is available, then print or print "no comment"-->
-        
+        <div>here
+          <% post.comment.forEach(function(comments){ %>
+            <tr><%= comments.nickname %>
+              <%= comments.content ? comments.content : "" %>
+            </tr>
+          <%})%>
+        </div>
       <br>
       <br>
       <br>
