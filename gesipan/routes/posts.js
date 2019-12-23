@@ -57,7 +57,7 @@ router.post('/:id', function(req, res, next) {
   console.log(req.body._id); //id
   //req.body will be {comment : "test comment"}, I need to loop through
   //append string to array.
-
+  var currentID;
   //before findOneAndUpdate, should connect with comment model and append to it
   Comment.create(req.body, function(err, comment) {
     //only after creation, the unique ID is available.
@@ -68,11 +68,12 @@ router.post('/:id', function(req, res, next) {
     }
     //using then?
     var commentID;
-    commentID = connectCID(req.params.id); //this is then
+    commentID = connectCID(req.params.id,res); //this is then
     //res render? res.json? need to decide
+    //res.redirect('/posts/'+req.params.id);
   });
 
-  //connectCID(); //the problem is comment.create is faster
+  //here the post needs to be the post info
 });
 
 // show
@@ -142,7 +143,7 @@ function checkPermission(req, res, next) {
 }
 
 //this is a function for connecting CommentID to postID
-function connectCID(postID) {
+function connectCID(postID,res) {
   //first check the unique id of comments
   Comment.find({}).exec(function(err, comments) {
     console.log('comments length is : ');
@@ -157,30 +158,27 @@ function connectCID(postID) {
       //post.comment.push(comments[comments.length - 1].id); //here finally adding the comments ID to post
 
       postUpdate(post, comments, postID,post);
-      /*
-      setTimeout(function(){
-        console.log('waiting for 5 seconds');
-      },5000);
-      */
+      console.log('here should be printed last')
+      res.redirect('/posts/'+postID);
       
     });
   });
 }
 
 function commentPush(query,comments){
-  query.comment.push(comments[comments.length-1].id);
-  return 1;
+  return query.comment.push(comments[comments.length-1].id);
 }
 
 async function postUpdate(query, comments, postID,post){
+  console.log("before adding the comment");
   var result = await commentPush(query, comments);
-
-  Post.findOneAndUpdate(
+  console.log(post);//until here the comment section hass been added
+  Post.findOneAndUpdate(//i feel that this function takes longtime?
     { _id: postID },
     post,
-    { runValidators: true },
+    { runValidators: true, new:true },
     function(err, post) {
-      if (err) return res.json(err);
+      if (err) return console.log(err);
       console.log('finally here lets see...');
       console.log(post);
     }
