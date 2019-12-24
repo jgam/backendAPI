@@ -72,6 +72,21 @@ form .form-group{
   background-color: #F5F5F5;
   padding: 6px 15px;
 }
+
+/*comment view CSS*/
+.commentViewBoxTop {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  border-bottom: 1px solid #ccc;
+  background-color: #F5F5F5;
+  padding: 6px 15px;
+}
+.commentViewBox{
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
 /*comment CSS*/
 .commentBox{
   margin-left: 40%;

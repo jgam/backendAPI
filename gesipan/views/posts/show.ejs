@@ -38,12 +38,14 @@
       </div> <!-- post-container end -->
       <br>
       <br>
-        <div> <%= post.comment ? post.comment : "no comment" %> </div><!--if comment is available, then print or print "no comment"-->
-        <div>here
+        <div class="conmmentViewBoxTop"> <%= post.comment ? "Comments" : "no comment" %> </div><!--if comment is available, then print or print "no comment"-->
+        <div class="commentViewBox">
           <% post.comment.forEach(function(comments){ %>
-            <tr><%= comments.nickname %>
+            <br>
+            <tr><%= comments.nickname %>:
               <%= comments.content ? comments.content : "" %>
             </tr>
+            <br>
           <%})%>
         </div>
       <br>
