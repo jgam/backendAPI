@@ -60,6 +60,6 @@ app.use('/users', require('./routes/users'));
 
 //port setting
 var port = 3000;
-app.listen(port, function() {
+app.listen(process.env.PORT|| port, function() {
   console.log('server on! localhost:' + port);
 });
